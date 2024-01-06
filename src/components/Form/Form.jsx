@@ -1,24 +1,31 @@
-import React, {useState} from 'react'
-import { nanoid } from 'nanoid'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { addContactAction } from '../../store/sliceContacts';
+// import { nanoid } from 'nanoid'
 import css from './Form.module.css'
 
-const Form = ({ addContact }) => {
+const Form = () => {
+  const { contacts } = useSelector((state) => state.contacts);
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const handleChangeName = ({ target: { value } }) => setName(value);
-  const handleChangeNumber = ({ target: { value } }) => setNumber(value);
+  const handleChangeNumber = ({ target: { value } }) => setNumber(value); 
 
-  const adContact = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newContact = { id: nanoid(), name, number };
-    addContact(newContact);
+    if (contacts.some(el => el.name.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+      alert(`${name} is alredy in contacts`);
+    } else {
+      dispatch(addContactAction({ name, number }));
+    }
     setName('');
     setNumber('');
   }
   return (
-    <form className={css.form} onSubmit={adContact}>
+    <form className={css.form} onSubmit={handleSubmit}>
       <label className={css.label}>
         Name
         <input className={css.input} type="text" name="name" value={name} onChange={handleChangeName} required />
