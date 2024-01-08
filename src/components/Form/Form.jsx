@@ -20,9 +20,9 @@ const Form = () => {
       alert(`${name} is alredy in contacts`);
     } else {
       dispatch(addContactAction({ name, number }));
+      setName('');
+      setNumber('');
     }
-    setName('');
-    setNumber('');
   }
   return (
     <form className={css.form} onSubmit={handleSubmit}>
